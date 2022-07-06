@@ -6,8 +6,11 @@ const divTodoList = document.querySelector(`.todo-list`);
 const txtInput = document.querySelector('.new-todo');
 const btnBorrar = document.querySelector('.clear-completed');
 const ulFiltros = document.querySelector('.filters');
-const anchoFiltros = document.querySelectorAll('.filtro')
+const anchoFiltros = document.querySelectorAll('.filtro');
+const todoCount = document.querySelector('.todo-count strong');
 
+
+//Creación de tareas
 export const crearTodoHtml = (todo) => {
     const htmlTodo = `
     <li class="${(todo.completado) ? 'completed' : ''}" data-id="${todo.id}">
@@ -24,9 +27,28 @@ export const crearTodoHtml = (todo) => {
 
     divTodoList.append(div.firstElementChild);
 
+    acumularPendientes();
+
     return div.firstElementChild;
 
 }
+
+
+//Acumulador de Pendientes
+const acumularPendientes = () => {
+
+    let cantidad = 0
+
+    for (let i = divTodoList.children.length - 1; i >= 0; i--) {
+        const elemento = divTodoList.children[i];
+        if (!elemento.classList.contains('completed')) {
+            cantidad++;
+        }
+    }
+    
+    todoCount.innerText = cantidad;
+}
+
 
 //Eventos
 
@@ -60,6 +82,8 @@ divTodoList.addEventListener('click', (event) => {
         todoList.eliminarTodo(todoId);
         divTodoList.removeChild(todoElemento);//Para eliminar un elemento del HTML
     }
+
+    acumularPendientes();
 
 });
 
@@ -101,3 +125,5 @@ ulFiltros.addEventListener('click', (event) => {
     }
 
 });
+
+
